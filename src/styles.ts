@@ -7,6 +7,8 @@ export const AppContainer = styled.div`
     heigth: 100%;
     padding: 20px;
     width: 100%;
+    justify-content:center;
+    height:100%;
 `
 export const ColumnContainer = styled.div`
     background-color: #ebecfe0;
@@ -16,6 +18,7 @@ export const ColumnContainer = styled.div`
     border-radius: 3px;
     padding: 8px 8px;
     flex-grow:0;
+    
 `
 export const ColumnTitle = styled.div`
     padding: 6px 16px 12px;
