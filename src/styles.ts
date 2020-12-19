@@ -41,7 +41,7 @@ export const AddItemButton = styled.button<AdddItemButtonProps>`
     border-radius:3px;
     border:none;
     color:${props=> (props.dark ? "#000": "#fff")};
-    crsor:pointer;
+    cursor:pointer;
     max-width:300px;
     padding:10px 12px;
     text-align:left;
