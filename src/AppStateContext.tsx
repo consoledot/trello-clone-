@@ -1,4 +1,4 @@
-import {createContext, PropsWithChildren} from 'react'
+import {createContext, PropsWithChildren, useContext} from 'react'
 interface Task{
     id:string
     text:string
@@ -14,6 +14,34 @@ export interface AppState{
 interface AppStateContextProps{
     state:AppState
 }
+
+type Action =
+|{
+    type:"ADD_LIST"
+    payload:string
+}
+|{
+    type:"ADD_TASK"
+    payload:{text:string, taskId:string}
+}
+const appStateReducers = (state:AppState, action:Action):AppState=>{
+    switch(action.type){
+        case "ADD_LIST":{
+            return{
+                ...state
+            }
+        }
+        case "ADD_TASK":{
+            return{
+                ...state
+            }
+        }
+        default:{
+            return state
+        }
+    }
+}
+
 const appData:AppState={
     lists:[
         {
@@ -57,4 +85,7 @@ export const AppStateProvider = ({children}:PropsWithChildren<{}>)=>{
             {children}
         </AppStateContext.Provider>
     )
+}
+export const useAppState = ()=>{
+    return useContext(AppStateContext)
 }
