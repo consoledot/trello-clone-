@@ -1,4 +1,7 @@
-import {createContext, PropsWithChildren, useContext} from 'react'
+import {createContext, PropsWithChildren, useContext, useReducer} from 'react'
+import {v4 as uuid} from 'uuid'
+import {findItemIndexById} from './utils/findItemIndexById'
+
 interface Task{
     id:string
     text:string
@@ -13,34 +16,10 @@ export interface AppState{
 }
 interface AppStateContextProps{
     state:AppState
+    dispatch:any
 }
 
-type Action =
-|{
-    type:"ADD_LIST"
-    payload:string
-}
-|{
-    type:"ADD_TASK"
-    payload:{text:string, taskId:string}
-}
-const appStateReducers = (state:AppState, action:Action):AppState=>{
-    switch(action.type){
-        case "ADD_LIST":{
-            return{
-                ...state
-            }
-        }
-        case "ADD_TASK":{
-            return{
-                ...state
-            }
-        }
-        default:{
-            return state
-        }
-    }
-}
+
 
 const appData:AppState={
     lists:[
@@ -76,12 +55,48 @@ const appData:AppState={
         }
     ]
 }
+type Action =
+|{
+    type:"ADD_LIST"
+    payload:string
+}
+|{
+    type:"ADD_TASK"
+    payload:{text:string, taskId:string}
+}
+const appStateReducers = (state:AppState, action:Action):AppState=>{
+    switch(action.type){
+        case "ADD_TASK":{
+            const tagertLaneIndex = findItemIndexById(state.lists, action.payload.taskId)
+            state.lists[tagertLaneIndex].tasks.push({
+                id:uuid(),
+                text: action.payload.text
+            })
+            return{
+             ...state
+            }
+        }
+        case "ADD_LIST":{
+            return{
+                ...state,
+                lists:[
+                    ...state.lists,
+                    {id:uuid(), text: action.payload, tasks:[]}
+                ]
+            }
+        }
+        default:{
+            return state
+        }
+    }
+}
 
 const AppStateContext = createContext<AppStateContextProps>({} as AppStateContextProps)
 
 export const AppStateProvider = ({children}:PropsWithChildren<{}>)=>{
+    const [state, dispatch] = useReducer(appStateReducers, appData)
     return(
-        <AppStateContext.Provider value ={{state:appData}}>
+        <AppStateContext.Provider value ={{state, dispatch}}>
             {children}
         </AppStateContext.Provider>
     )
